@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¡Muchas Felicidades, Clau! 💖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg-1: #fff0f6;
+      --bg-2: #ffd6e7;
+      --bg-3: #ffadd2;
+      --pink-primary: #e83e8c;
+      --pink-deep: #b81d65;
+      --pink-soft: #ff85b3;
+      --pink-light: #fff5f9;
+      --gold: #f5b942;
+      --text-main: #4a1932;
+      --text-muted: #7d415d;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --shadow-soft: 0 20px 50px rgba(214, 51, 132, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text-main);
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      position: relative;
+    }
+
+    /* Ambient floating hearts & sparkles background */
+    .ambient-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .floating-heart {
+      position: absolute;
+      bottom: -40px;
+      opacity: 0;
+      animation: floatUp linear forwards;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(0.7) rotate(0deg);
+        opacity: 0;
+      }
+
+      15% {
+        opacity: 0.75;
+      }
+
+      85% {
+        opacity: 0.65;
+      }
+
+      100% {
+        transform: translateY(-110vh) scale(1.2) rotate(25deg);
+        opacity: 0;
+      }
+    }
+
+    /* Confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* Top bar */
+    .top-controls {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      z-index: 30;
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(232, 62, 140, 0.25);
+      color: var(--pink-deep);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(232, 62, 140, 0.12);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-2px);
+      background: #ffffff;
+    }
+
+    /* Main presentation stage */
+    .stage {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 680px;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      animation: slideIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Card container */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+      padding: 36px 28px;
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #ff85b3, #e83e8c, #f5b942, #e83e8c, #ff85b3);
+    }
+
+    .script-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.2rem, 6vw, 3.3rem);
+      color: var(--pink-primary);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    /* Slide 1: Interactive Envelope */
+    .envelope-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 0 8px;
+    }
+
+    .envelope {
+      position: relative;
+      width: 260px;
+      height: 175px;
+      background: linear-gradient(145deg, #ff9ec4, #ff70a6);
+      border-radius: 14px;
+      box-shadow: 0 18px 36px rgba(232, 62, 140, 0.28);
+      cursor: pointer;
+      transition: transform 0.35s ease;
+      margin: 18px auto 26px;
+    }
+
+    .envelope:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 98px;
+      background: linear-gradient(180deg, #ff5c99, #ff85b3);
+      clip-path: polygon(0 0, 50% 95%, 100% 0);
+      transform-origin: top center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 3;
+      border-top-left-radius: 14px;
+      border-top-right-radius: 14px;
+    }
+
+    .envelope.open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-pocket {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #ff85b3 0%, #e83e8c 100%);
+      clip-path: polygon(0 100%, 0 35%, 50% 72%, 100% 35%, 100% 100%);
+      border-radius: 14px;
+      z-index: 4;
+    }
+
+    .envelope-letter-preview {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 14px;
+      height: 130px;
+      background: #fffafc;
+      border-radius: 10px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .envelope.open .envelope-letter-preview {
+      transform: translateY(-72px);
+    }
+
+    .wax-seal {
+      position: absolute;
+      top: 56%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px;
+      height: 52px;
+      background: radial-gradient(circle at 30% 30%, #ffd1e3, #d61f69);
+      border-radius: 50%;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 6px 14px rgba(184, 29, 101, 0.35);
+      animation: pulseHeart 1.6s infinite ease-in-out;
+      transition: opacity 0.3s ease;
+    }
+
+    .envelope.open .wax-seal {
+      opacity: 0;
+    }
+
+    @keyframes pulseHeart {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, #ff5c99 0%, #e83e8c 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 10px 24px rgba(232, 62, 140, 0.32);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(232, 62, 140, 0.42);
+    }
+
+    .btn-secondary {
+      background: var(--pink-light);
+      color: var(--pink-deep);
+      border: 1.5px solid rgba(232, 62, 140, 0.3);
+      border-radius: 999px;
+      padding: 11px 22px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #ffe3ef;
+      transform: translateY(-1px);
+    }
+
+    /* Slide 2: Greeting badges & illustration */
+    .badge-pill {
+      display: inline-block;
+      background: #ffe3ef;
+      color: var(--pink-deep);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    .hero-illustration {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 14px;
+      animation: gentleBob 3s ease-in-out infinite;
+    }
+
+    @keyframes gentleBob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    /* Slide 3: Stationery Letter */
+    .letter-paper {
+      background: #fffafd;
+      border: 1.5px solid #ffd6e7;
+      border-radius: 18px;
+      padding: 24px 22px;
+      text-align: left;
+      position: relative;
+      box-shadow: inset 0 0 24px rgba(255, 182, 213, 0.18);
+      margin-bottom: 20px;
+    }
+
+    .letter-paper p {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text-main);
+      margin-bottom: 14px;
+    }
+
+    .letter-paper p:last-child {
+      margin-bottom: 0;
+    }
+
+    .letter-signature {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.7rem;
+      color: var(--pink-primary);
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    /* Slide 4: Interactive Cake */
+    .cake-box {
+      margin: 12px auto 18px;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .cake-box:hover {
+      transform: scale(1.03);
+    }
+
+    .flame {
+      transform-origin: center bottom;
+      animation: flicker 0.5s infinite alternate ease-in-out;
+    }
+
+    .flame.out {
+      animation: none;
+      opacity: 0;
+      transform: scale(0);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    @keyframes flicker {
+      from {
+        transform: scaleY(1) rotate(-3deg);
+      }
+
+      to {
+        transform: scaleY(1.12) rotate(3deg);
+      }
+    }
+
+    .wish-banner {
+      min-height: 28px;
+      font-weight: 600;
+      color: var(--pink-deep);
+      margin-bottom: 16px;
+      font-size: 1rem;
+    }
+
+    /* Navigation Footer */
+    .nav-bar {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .dots {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(232, 62, 140, 0.28);
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+      padding: 0;
+    }
+
+    .dot.active {
+      background: var(--pink-primary);
+      transform: scale(1.3);
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 28px 18px;
+        border-radius: 22px;
+      }
+
+      .envelope {
+        width: 220px;
+        height: 150px;
+      }
+
+      .nav-bar {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ambient-layer" id="ambient-layer" aria-hidden="true"></div>
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <div class="top-controls">
+    <button class="icon-btn" id="music-toggle" type="button" aria-label="Activar o silenciar melodía">
+      <span id="music-icon">🎵</span>
+      <span id="music-label">Música</span>
+    </button>
+    <button class="icon-btn" id="hearts-burst-btn" type="button" aria-label="Lanzar corazones">
+      💖 Más amor
+    </button>
+  </div>
+
+  <main class="stage">
+    <!-- Slide 1: Envelope Intro -->
+    <section class="slide active" data-slide="0" aria-label="Portada de la tarjeta">
+      <div class="card">
+        <span class="badge-pill">✨ Tienes un mensaje especial ✨</span>
+        <h1 class="script-title">¡Para Clau! 💕</h1>
+        <p class="subtitle">
+          Hoy es un día muy especial y alguien preparó esta pequeña sorpresa llena de cariño para ti.
+        </p>
+
+        <div class="envelope-wrapper">
+          <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir sobre de cumpleaños">
+            <div class="envelope-flap"></div>
+            <div class="envelope-letter-preview">
+              <span style="font-size: 1.5rem;">💌</span>
+              <span
+                style="font-family: 'Dancing Script', cursive; font-size: 1.3rem; color: #e83e8c; font-weight: 700;">
+                ¡Feliz Cumpleaños!
+              </span>
+            </div>
+            <div class="envelope-pocket"></div>
+            <div class="wax-seal">💖</div>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="open-card-btn" type="button">
+          Abrir mi cartita 💌
+        </button>
+      </div>
+    </section>
+
+    <!-- Slide 2: Big Celebration -->
+    <section class="slide" data-slide="1" aria-label="Felicitación principal">
+      <div class="card">
+        <span class="badge-pill">🎉 ¡A celebrar! 🎉</span>
+        <div class="hero-illustration">
+          <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="80" cy="80" r="72" fill="#FFF0F6" stroke="#FFADD2" stroke-width="4" />
+            <path
+              d="M80 128C80 128 34 96 34 62C34 45.4315 47.4315 32 64 32C73.1223 32 80 37.5 80 37.5C80 37.5 86.8777 32 96 32C112.569 32 126 45.4315 126 62C126 96 80 128 80 128Z"
+              fill="#FF5C99" />
+            <path d="M55 54C55 48 60 44 66 44" stroke="#FFD6E7" stroke-width="4" stroke-linecap="round" />
+            <circle cx="32" cy="36" r="5" fill="#F5B942" />
+            <circle cx="132" cy="40" r="4" fill="#E83E8C" />
+            <circle cx="128" cy="118" r="5" fill="#F5B942" />
+            <circle cx="34" cy="112" r="4" fill="#FF85B3" />
+          </svg>
+        </div>
+        <h2 class="script-title">¡Muchas Felicidades, Claudi! 🎂</h2>
+        <p class="subtitle">
+          Que tu vida siga llena de momentos hermosos, risas, salud y muchísima alegría. ¡Hoy todo brilla más bonito
+          porque es tu día! ✨
+        </p>
+
+        <div class="action-row">
+          <button class="btn-primary" id="to-letter-btn" type="button">
+            Leer la cartita 🌷
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: Heartfelt Letter -->
+    <section class="slide" data-slide="2" aria-label="Mensaje de cumpleaños">
+      <div class="card">
+        <span class="badge-pill">🌸 Con mucho cariño 🌸</span>
+        <h2 class="script-title" style="font-size: 2.3rem;">Un mensaje para ti</h2>
+
+        <div class="letter-paper">
+          <p><strong>Querida Clau,</strong></p>
+          <p>
+            En este día tan especial quiero desearte un cumpleaños inolvidable, cumplimientos de todas tus metas y
+            momentos que te hagan sonreír de corazón.
+          </p>
+          <p>
+            Gracias por ser una persona en mi vida y por ayudarme cuando lo necesitaba. Que este nuevo año de vida venga
+            cargado de metas cumplidas, aventuras increíbles y todo el amor del mundo. 💖
+          </p>
+          <div class="letter-signature">¡Feliz Cumpleaños, Clau! 💕</div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-secondary" id="hug-btn" type="button">
+            Enviar lluvia de corazones 💗
+          </button>
+          <button class="btn-primary" id="to-cake-btn" type="button">
+            Ir al pastel 🎂
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: Interactive Cake & Wish -->
+    <section class="slide" data-slide="3" aria-label="Pastel y deseo">
+      <div class="card">
+        <span class="badge-pill">🕯️ Pide un deseo 🕯️</span>
+        <h2 class="script-title">¡Sopla las velitas, Clau!</h2>
+        <p class="subtitle">
+          Cierra los ojos, pide tu deseo favorito y toca el pastel para apagar las velitas.
+        </p>
+
+        <div class="cake-box" id="cake-btn" role="button" tabindex="0"
+          aria-label="Tocar pastel para apagar las velitas">
+          <svg width="200" height="175" viewBox="0 0 200 175" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Plate -->
+            <ellipse cx="100" cy="156" rx="82" ry="12" fill="#FFD6E7" />
+            <!-- Bottom layer -->
+            <rect x="34" y="106" width="132" height="46" rx="12" fill="#FF85B3" />
+            <!-- Top layer -->
+            <rect x="48" y="68" width="104" height="42" rx="10" fill="#FFB3D1" />
+            <!-- Frosting drips -->
+            <path
+              d="M48 76 C58 92, 68 92, 76 78 C84 94, 96 94, 102 78 C110 92, 124 92, 130 78 C138 90, 146 88, 152 76 L152 68 L48 68 Z"
+              fill="#FFF5F9" />
+            <!-- Candles -->
+            <rect x="70" y="40" width="8" height="28" rx="3" fill="#E83E8C" />
+            <rect x="96" y="34" width="8" height="34" rx="3" fill="#F5B942" />
+            <rect x="122" y="40" width="8" height="28" rx="3" fill="#E83E8C" />
+            <!-- Flames -->
+            <path class="flame" d="M74 22 C79 28, 79 36, 74 38 C69 36, 69 28, 74 22 Z" fill="#FFB703" />
+            <path class="flame" d="M100 16 C105 22, 105 30, 100 32 C95 30, 95 22, 100 16 Z" fill="#FFB703" />
+            <path class="flame" d="M126 22 C131 28, 131 36, 126 38 C121 36, 121 28, 126 22 Z" fill="#FFB703" />
+            <!-- Decorative hearts on cake -->
+            <circle cx="65" cy="128" r="4" fill="#FFF0F6" />
+            <circle cx="100" cy="128" r="4" fill="#FFF0F6" />
+            <circle cx="135" cy="128" r="4" fill="#FFF0F6" />
+          </svg>
+        </div>
+
+        <div class="wish-banner" id="wish-banner">Toca el pastel para pedir tu deseo ✨</div>
+
+        <div class="action-row">
+          <button class="btn-secondary" id="relight-btn" type="button" style="display: none;">
+            Encender velitas otra vez 🔥
+          </button>
+          <button class="btn-primary" id="replay-btn" type="button">
+            Ver desde el inicio 🔄
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation bar -->
+    <nav class="nav-bar" aria-label="Navegación de la presentación">
+      <button class="btn-secondary" id="prev-btn" type="button" style="visibility: hidden;">
+        ← Anterior
+      </button>
+      <div class="dots" role="tablist" aria-label="Diapositivas">
+        <button class="dot active" data-goto="0" aria-label="Portada"></button>
+        <button class="dot" data-goto="1" aria-label="Felicitación"></button>
+        <button class="dot" data-goto="2" aria-label="Cartita"></button>
+        <button class="dot" data-goto="3" aria-label="Pastel"></button>
+      </div>
+      <button class="btn-secondary" id="next-btn" type="button">
+        Siguiente →
+      </button>
+    </nav>
+  </main>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const dots = Array.from(document.querySelectorAll('.dot'));
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const envelope = document.getElementById('envelope');
+      const openCardBtn = document.getElementById('open-card-btn');
+      const toLetterBtn = document.getElementById('to-letter-btn');
+      const hugBtn = document.getElementById('hug-btn');
+      const toCakeBtn = document.getElementById('to-cake-btn');
+      const cakeBtn = document.getElementById('cake-btn');
+      const relightBtn = document.getElementById('relight-btn');
+      const replayBtn = document.getElementById('replay-btn');
+      const wishBanner = document.getElementById('wish-banner');
+      const flames = Array.from(document.querySelectorAll('.flame'));
+      const heartsBurstBtn = document.getElementById('hearts-burst-btn');
+      const musicToggle = document.getElementById('music-toggle');
+      const musicIcon = document.getElementById('music-icon');
+      const musicLabel = document.getElementById('music-label');
+      const ambientLayer = document.getElementById('ambient-layer');
+
+      let currentSlide = 0;
+      let candlesBlown = false;
+
+      /* --- Ambient Floating Hearts --- */
+      const heartSymbols = ['💖', '💕', '💗', '💓', '🌸', '✨', '🩷'];
+      function spawnFloatingHeart(burst = false) {
+        const el = document.createElement('span');
+        el.className = 'floating-heart';
+        el.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+        el.style.left = Math.random() * 96 + 'vw';
+        el.style.fontSize = (burst ? 18 + Math.random() * 20 : 14 + Math.random() * 16) + 'px';
+        const duration = burst ? 3.5 + Math.random() * 2.5 : 5 + Math.random() * 4;
+        el.style.animationDuration = duration + 's';
+        ambientLayer.appendChild(el);
+        setTimeout(() => el.remove(), duration * 1000);
+      }
+
+      setInterval(() => spawnFloatingHeart(false), 650);
+      function heartShower(count = 18) {
+        for (let i = 0; i < count; i++) {
+          setTimeout(() => spawnFloatingHeart(true), i * 80);
+        }
+      }
+
+      /* --- Confetti Engine --- */
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      let confettiPieces = [];
+      let confettiRaf = null;
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      const confettiColors = ['#e83e8c', '#ff85b3', '#ffd6e7', '#f5b942', '#ff5c99', '#ffffff'];
+
+      function launchConfetti(amount = 90) {
+        for (let i = 0; i < amount; i++) {
+          confettiPieces.push({
+            x: canvas.width * (0.2 + Math.random() * 0.6),
+            y: canvas.height * 0.45,
+            vx: (Math.random() - 0.5) * 12,
+            vy: -Math.random() * 11 - 4,
+            size: 6 + Math.random() * 6,
+            color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+            rotation: Math.random() * 360,
+            rotSpeed: (Math.random() - 0.5) * 10,
+            life: 1
+          });
+        }
+        if (!confettiRaf) {
+          animateConfetti();
+        }
+      }
+
+      function animateConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettiPieces.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.28;
+          p.rotation += p.rotSpeed;
+          p.life -= 0.008;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.globalAlpha = Math.max(0, p.life);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+          ctx.restore();
+        });
+
+        confettiPieces = confettiPieces.filter((p) => p.life > 0 && p.y < canvas.height + 30);
+        if (confettiPieces.length > 0) {
+          confettiRaf = requestAnimationFrame(animateConfetti);
+        } else {
+          confettiRaf = null;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      /* --- Web Audio Gentle Birthday Melody --- */
+      let audioCtx = null;
+      let isPlayingMusic = false;
+      let melodyTimer = null;
+
+      // Happy Birthday notes in Hz
+      const melody = [
+        [261.63, 0.3], [261.63, 0.2], [293.66, 0.5], [261.63, 0.5], [349.23, 0.5], [329.63, 0.9],
+        [261.63, 0.3], [261.63, 0.2], [293.66, 0.5], [261.63, 0.5], [392.00, 0.5], [349.23, 0.9],
+        [261.63, 0.3], [261.63, 0.2], [523.25, 0.5], [440.00, 0.5], [349.23, 0.5], [329.63, 0.5], [293.66, 0.8],
+        [466.16, 0.3], [466.16, 0.2], [440.00, 0.5], [349.23, 0.5], [392.00, 0.5], [349.23, 1.0]
+      ];
+      let noteIndex = 0;
+
+      function playNextNote() {
+        if (!isPlayingMusic || !audioCtx) return;
+        const [freq, dur] = melody[noteIndex];
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur * 0.9);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+
+        noteIndex = (noteIndex + 1) % melody.length;
+        const pause = noteIndex === 0 ? 1200 : dur * 550;
+        melodyTimer = setTimeout(playNextNote, pause);
+      }
+
+      function toggleMusic(forceStart = false) {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        if (forceStart && isPlayingMusic) return;
+
+        isPlayingMusic = forceStart ? true : !isPlayingMusic;
+        if (isPlayingMusic) {
+          musicIcon.textContent = '🔊';
+          musicLabel.textContent = 'Pausar';
+          clearTimeout(melodyTimer);
+          playNextNote();
+        } else {
+          musicIcon.textContent = '🎵';
+          musicLabel.textContent = 'Música';
+          clearTimeout(melodyTimer);
+        }
+      }
+
+      musicToggle.addEventListener('click', () => toggleMusic(false));
+
+      /* --- Navigation --- */
+      function goToSlide(index) {
+        currentSlide = Math.max(0, Math.min(slides.length - 1, index));
+        slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+        dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+
+        prevBtn.style.visibility = currentSlide === 0 ? 'hidden' : 'visible';
+        nextBtn.style.visibility = currentSlide === slides.length - 1 ? 'hidden' : 'visible';
+
+        if (currentSlide === 1) {
+          launchConfetti(85);
+          heartShower(14);
+        }
+      }
+
+      function openEnvelopeAndAdvance() {
+        envelope.classList.add('open');
+        toggleMusic(true);
+        heartShower(12);
+        setTimeout(() => {
+          goToSlide(1);
+        }, 650);
+      }
+
+      envelope.addEventListener('click', openEnvelopeAndAdvance);
+      envelope.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openEnvelopeAndAdvance();
+        }
+      });
+      openCardBtn.addEventListener('click', openEnvelopeAndAdvance);
+
+      toLetterBtn.addEventListener('click', () => goToSlide(2));
+      toCakeBtn.addEventListener('click', () => goToSlide(3));
+
+      hugBtn.addEventListener('click', () => {
+        heartShower(24);
+        launchConfetti(45);
+      });
+
+      heartsBurstBtn.addEventListener('click', () => {
+        heartShower(20);
+      });
+
+      function blowCandles() {
+        if (candlesBlown) return;
+        candlesBlown = true;
+        flames.forEach((f) => f.classList.add('out'));
+        wishBanner.textContent = '¡Deseo pedido! Que todos tus sueños se hagan realidad, Clau 💖🎉';
+        relightBtn.style.display = 'inline-flex';
+        launchConfetti(120);
+        heartShower(22);
+      }
+
+      cakeBtn.addEventListener('click', blowCandles);
+      cakeBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          blowCandles();
+        }
+      });
+
+      relightBtn.addEventListener('click', () => {
+        candlesBlown = false;
+        flames.forEach((f) => f.classList.remove('out'));
+        wishBanner.textContent = 'Toca el pastel para pedir otro deseo ✨';
+        relightBtn.style.display = 'none';
+      });
+
+      replayBtn.addEventListener('click', () => {
+        envelope.classList.remove('open');
+        goToSlide(0);
+      });
+
+      prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+      dots.forEach((dot) => {
+        dot.addEventListener('click', () => goToSlide(Number(dot.dataset.goto)));
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) goToSlide(currentSlide + 1);
+        if (e.key === 'ArrowLeft' && currentSlide > 0) goToSlide(currentSlide - 1);
+      });
+    })();
+  </script>
+</body>
+
+</html>
